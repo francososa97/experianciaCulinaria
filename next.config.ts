@@ -4,6 +4,8 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  basePath: '/experianciaCulinaria',
+  assetPrefix: '/experianciaCulinaria/',
 };
 
 module.exports = nextConfig;
