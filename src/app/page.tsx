@@ -1,21 +1,6 @@
 // The exported code uses Tailwind CSS. Install Tailwind CSS in your dev environment to ensure all styles work.
 "use client";// The exported code uses Tailwind CSS. Install Tailwind CSS in your dev environment to ensure all styles work.
 import React, { useState } from 'react';
-import {
-  HomeIcon,
-  SparklesIcon,
-  CubeIcon,
-  FireIcon,
-  HeartIcon,
-} from '@heroicons/react/24/outline';
-import {
-  EggIcon,         // 🍳 Brunch
-  SandwichIcon,    // 🥪 Entrada
-  UtensilsIcon,    // 🍝 Plato principal
-  CakeSliceIcon,   // 🍰 Postre
-  HomeIcon,        // Inicio
-} from 'lucide-react';
-import * as echarts from 'echarts';
 const App: React.FC = () => {
 const [currentStep, setCurrentStep] = useState(0);
 const icons = [
