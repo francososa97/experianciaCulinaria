@@ -7,6 +7,10 @@ const nextConfig = {
   },
   basePath: isProd ? '/experianciaCulinaria' : '',
   assetPrefix: isProd ? '/experianciaCulinaria/' : '',
+  experimental: {
+    optimizeCss: true,  // 👈 inlining de Tailwind CSS!
+  },
 };
+
 
 module.exports = nextConfig;
