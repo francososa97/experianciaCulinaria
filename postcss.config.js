@@ -1,4 +1,4 @@
-// ✅ Compatible con Webpack y Turbopack (CommonJS)
+// postcss.config.js
 module.exports = {
   plugins: {
     '@tailwindcss/postcss': {},
