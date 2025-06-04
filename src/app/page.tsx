@@ -1,8 +1,17 @@
 // The exported code uses Tailwind CSS. Install Tailwind CSS in your dev environment to ensure all styles work.
 "use client";// The exported code uses Tailwind CSS. Install Tailwind CSS in your dev environment to ensure all styles work.
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+declare global {
+  interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    MercadoPago: any;
+  }
+}
 const App: React.FC = () => {
 const [currentStep, setCurrentStep] = useState(0);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [mpInstance, setMpInstance] = useState<unknown>(null);
 const icons = [
   "🏠",  // Inicio
   "🍳",  // Brunch
@@ -143,6 +152,52 @@ const steps = [
     imageUrl: "https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg" // Volcán de chocolate
   }
 ];
+  useEffect(() => {
+      if (typeof window !== "undefined" && window.MercadoPago) {
+    const mp = new window.MercadoPago("TEST-8e699f33-006f-4eb9-a170-8ff0a2896bd5", { locale: "es-AR" });
+    setMpInstance(mp);
+  } else {
+    console.warn("MercadoPago aún no está disponible en window.");
+  }
+  }, []);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const [preferenceId, setPreferenceId] = useState<string | null>(null);
+
+  const handleBuy = async () => {
+    const id = await createPreference();
+    if (id) {
+      setPreferenceId(id);
+      // Si estás usando el checkout brick:
+      const mp = new window.MercadoPago("TEST-8e699f33-006f-4eb9-a170-8ff0a2896bd5", { locale: "es-AR" });
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const checkout = mp.checkout({
+        preference: {
+          id,
+        },
+        autoOpen: true,
+      });
+      mp.checkout({
+  preference: { id },
+  autoOpen: true,
+});
+    }
+  };
+  const createPreference = async () => {
+    try {
+      debugger;
+      const response = await axios.post("/Api/create-preference", {
+        title: "Bananita contenta",
+        price: 100,
+        quantity: 1,
+      });
+
+      const { id } = response.data;
+      return id;
+    } catch (error) {
+      console.error("Error creando preferencia:", error);
+      return null;
+    }
+  };
 
 const handleNextStep = () => {
 if (currentStep < steps.length - 1) {
@@ -218,6 +273,10 @@ className={`w-6 h-1 rounded-full ${currentStep === index ? 'bg-purple-500' : 'bg
 </div>
 {/* Botón de navegación */}
 <div className="flex justify-center">
+  
+                      <button onClick={handleBuy} className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition duration-300 ease-in-out whitespace-nowrap !rounded-button cursor-pointer">
+                        Comprar
+                      </button>
 <button
 onClick={handleNextStep}
 className="!rounded-button px-8 py-3 bg-gradient-to-r from-purple-700 to-indigo-800 text-white font-medium tracking-wide hover:from-purple-600 hover:to-indigo-700 transition-all duration-300 shadow-lg shadow-purple-900/30 flex items-center cursor-pointer"
@@ -231,6 +290,7 @@ className="!rounded-button px-8 py-3 bg-gradient-to-r from-purple-700 to-indigo-
 <>
 <span>Siguiente Paso</span>
 <i className="fas fa-arrow-right ml-2"></i>
+
 </>
 )}
 </button>
